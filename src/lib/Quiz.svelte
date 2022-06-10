@@ -1,8 +1,10 @@
-<script>
+<script lang="ts">
+	import type { Question } from "src/models/Question";
+
 	let result = "";
 	let correctAnswer = "b";
 	let answers = ["a", "b", "c", "d"];
-	const quiz = getQuiz();
+	let quiz = getQuiz();
 
 	function pickAnswer(answer) {
 		if (answer === correctAnswer) {
@@ -11,25 +13,33 @@
 		result = "Oops.. That was wrong!";
 	}
 
-	async function getQuiz() {
+	async function getQuiz(): Promise<Question[]> {
 		const response = await fetch(
 			"https://opentdb.com/api.php?amount=10&category=18&type=multiple"
 		);
 		const quiz = await response.json();
 		console.log(quiz);
-		return quiz;
+		return quiz.results;
+	}
+
+	function handleClick() {
+		quiz = getQuiz();
 	}
 </script>
 
 <div>
-	<button on:click={getQuiz}>Get questions</button>
+	<button on:click={handleClick}>Get questions</button>
 	{#if result}
 		<h4>{result}</h4>
 	{:else}
 		<p>Please pick an answer...</p>
 	{/if}
 
-	<!-- <h3>{quiz.results[0].question}</h3> -->
+	{#await quiz}
+		<p>Loading...</p>
+	{:then data}
+		<h3>{data[0].question}</h3>
+	{/await}
 
 	{#each answers as answer}
 		<button on:click={() => pickAnswer(answer)}
