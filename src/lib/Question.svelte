@@ -50,7 +50,11 @@
 {/if}
 
 {#each allAnswers as answer}
-	<button on:click={() => checkQuestion(answer.isCorrect)}
+	<button
+		class={isAnswered && (answer.isCorrect ? "correct" : "incorrect")}
+		on:click={() => checkQuestion(answer.isCorrect)}
+		disabled={isAnswered}
+	>
 		>{@html answer.answer}</button
 	>
 {/each}
@@ -60,3 +64,13 @@
 		<button on:click={nextQuestion}>Next Question</button>
 	</div>
 {/if}
+
+<style>
+	button.correct {
+		background-color: green;
+	}
+
+	button.incorrect {
+		background-color: red;
+	}
+</style>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { fade, blur, fly, slide, scale } from "svelte/transition";
+	import { onMount, beforeUpdate, afterUpdate, onDestroy } from "svelte";
 	import type { Question as IQuestion } from "src/models/Question";
 	import Question from "./Question.svelte";
 
@@ -7,12 +8,21 @@
 	let currentQuestion = 0;
 	let score = 0;
 
+	onMount(() => {
+		console.log("Mounted!");
+	});
+	beforeUpdate(() => {
+		console.log("Before update!");
+	});
+	afterUpdate(() => {
+		console.log("After update!");
+	});
+
 	async function getQuiz(): Promise<IQuestion[]> {
 		const response = await fetch(
 			"https://opentdb.com/api.php?amount=10&category=18&type=multiple"
 		);
 		const quiz = await response.json();
-		console.log(quiz);
 		return quiz.results;
 	}
 
