@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { fade, blur, fly, slide, scale } from "svelte/transition";
-	import { onMount, beforeUpdate, afterUpdate, onDestroy } from "svelte";
+	import { fly } from "svelte/transition";
+	import { onMount, beforeUpdate, afterUpdate } from "svelte";
 	import type { Question as IQuestion } from "src/models/Question";
 	import Question from "./Question.svelte";
 	import Modal from "./Modal.svelte";
