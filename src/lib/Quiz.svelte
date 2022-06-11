@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { fade, blur, fly, slide, scale } from "svelte/transition";
 	import type { Question as IQuestion } from "src/models/Question";
 	import Question from "./Question.svelte";
 
@@ -41,11 +42,20 @@
 	{:then data}
 		{#each data as question, index}
 			{#if index === currentQuestion}
-				<Question {addToScore} {nextQuestion} {question} />
+				<div
+					in:fly={{ x: 100 }}
+					out:fly={{ x: -200 }}
+					class="fade-wrapper"
+				>
+					<Question {addToScore} {nextQuestion} {question} />
+				</div>
 			{/if}
 		{/each}
 	{/await}
 </div>
 
 <style>
+	.fade-wrapper {
+		position: absolute;
+	}
 </style>
