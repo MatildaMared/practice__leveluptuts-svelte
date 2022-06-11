@@ -3,6 +3,8 @@
 	import Question from "./Question.svelte";
 
 	let quiz = getQuiz();
+	let currentQuestion = 0;
+	let score = 0;
 
 	async function getQuiz(): Promise<IQuestion[]> {
 		const response = await fetch(
@@ -13,19 +15,34 @@
 		return quiz.results;
 	}
 
-	function handleClick() {
+	function nextQuestion() {
+		currentQuestion += 1;
+	}
+
+	function resetQuiz() {
 		quiz = getQuiz();
+		currentQuestion = 0;
+		score = 0;
+	}
+
+	function addToScore() {
+		score += 1;
 	}
 </script>
 
 <div>
-	<button on:click={handleClick}>Get questions</button>
+	<button on:click={resetQuiz}>Start New Quiz</button>
+
+	<h3>My Score: {score}</h3>
+	<h4>Question #{currentQuestion + 1}</h4>
 
 	{#await quiz}
 		<p>Loading...</p>
 	{:then data}
-		{#each data as question}
-			<Question {question} />
+		{#each data as question, index}
+			{#if index === currentQuestion}
+				<Question {addToScore} {nextQuestion} {question} />
+			{/if}
 		{/each}
 	{/await}
 </div>

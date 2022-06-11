@@ -1,7 +1,9 @@
 <script lang="ts">
 	import type { Question } from "../models/Question";
 	export let question: Question;
-	let isCorrect;
+	export let addToScore: () => void;
+	export let nextQuestion: () => void;
+	let isCorrect: boolean;
 	let isAnswered = false;
 
 	interface Answer {
@@ -26,22 +28,25 @@
 		return shuffledArray.sort(() => Math.random() - 0.5);
 	}
 
-	function checkQuestion(boolean) {
+	function checkQuestion(correct) {
 		isAnswered = true;
-		isCorrect = boolean;
+		isCorrect = correct;
+		if (correct) {
+			addToScore();
+		}
 	}
 </script>
 
 <h3>{@html question.question}</h3>
 
 {#if isAnswered}
-	<h4>
+	<h5>
 		{#if isCorrect}
 			You got it right! 🥳
 		{:else}
 			You goofed up... 😨
 		{/if}
-	</h4>
+	</h5>
 {/if}
 
 {#each allAnswers as answer}
@@ -49,3 +54,9 @@
 		>{@html answer.answer}</button
 	>
 {/each}
+
+{#if isAnswered}
+	<div>
+		<button on:click={nextQuestion}>Next Question</button>
+	</div>
+{/if}
