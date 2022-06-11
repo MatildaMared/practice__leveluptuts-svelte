@@ -40,7 +40,7 @@
 <h3>{@html question.question}</h3>
 
 {#if isAnswered}
-	<h5>
+	<h5 class:correct={isCorrect}>
 		{#if isCorrect}
 			You got it right! 🥳
 		{:else}
@@ -72,5 +72,9 @@
 
 	button.incorrect {
 		background-color: red;
+	}
+
+	h5.correct {
+		color: green;
 	}
 </style>
