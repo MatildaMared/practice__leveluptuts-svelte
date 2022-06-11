@@ -1,24 +1,13 @@
 <script lang="ts">
 	import { fly } from "svelte/transition";
-	import { onMount, beforeUpdate, afterUpdate } from "svelte";
 	import type { Question as IQuestion } from "src/models/Question";
 	import Question from "./Question.svelte";
 	import Modal from "./Modal.svelte";
+	import { score } from "../store";
 
 	let quiz = getQuiz();
 	let currentQuestion = 0;
-	let score = 0;
 	let showModal = false;
-
-	onMount(() => {
-		console.log("Mounted!");
-	});
-	beforeUpdate(() => {
-		console.log("Before update!");
-	});
-	afterUpdate(() => {
-		console.log("After update!");
-	});
 
 	async function getQuiz(): Promise<IQuestion[]> {
 		const response = await fetch(
@@ -35,16 +24,12 @@
 	function resetQuiz() {
 		showModal = false;
 		currentQuestion = 0;
-		score = 0;
+		score.set(0);
 		quiz = getQuiz();
 	}
 
-	function addToScore() {
-		score += 1;
-	}
-
 	// Reactive statement
-	$: if (score > 1) {
+	$: if ($score > 1) {
 		showModal = true;
 	}
 
@@ -55,7 +40,7 @@
 <div>
 	<button on:click={resetQuiz}>Start New Quiz</button>
 
-	<h3>My Score: {score}</h3>
+	<h3>My Score: {$score}</h3>
 	<h4>Question #{questionNumber}</h4>
 
 	{#await quiz}
@@ -68,7 +53,7 @@
 					out:fly={{ x: -200 }}
 					class="fade-wrapper"
 				>
-					<Question {addToScore} {nextQuestion} {question} />
+					<Question {nextQuestion} {question} />
 				</div>
 			{/if}
 		{/each}
@@ -76,15 +61,15 @@
 </div>
 
 {#if showModal}
-	<Modal>
+	<Modal on:close={resetQuiz}>
 		<h3>You won!</h3>
 		<p>Congratulations 🥳</p>
 		<button on:click={resetQuiz}>Start New Quiz</button>
 	</Modal>
-
-	<style>
-		.fade-wrapper {
-			position: absolute;
-		}
-	</style>
 {/if}
+
+<style lang="scss">
+	.fade-wrapper {
+		position: absolute;
+	}
+</style>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Question } from "../models/Question";
+	import { score } from "../store";
 	export let question: Question;
-	export let addToScore: () => void;
 	export let nextQuestion: () => void;
 	let isCorrect: boolean;
 	let isAnswered = false;
@@ -32,7 +32,7 @@
 		isAnswered = true;
 		isCorrect = correct;
 		if (correct) {
-			addToScore();
+			score.update((score) => score + 1);
 		}
 	}
 </script>
@@ -55,7 +55,7 @@
 		on:click={() => checkQuestion(answer.isCorrect)}
 		disabled={isAnswered}
 	>
-		>{@html answer.answer}</button
+		{@html answer.answer}</button
 	>
 {/each}
 
@@ -65,13 +65,15 @@
 	</div>
 {/if}
 
-<style>
-	button.correct {
-		background-color: green;
-	}
+<style lang="scss">
+	button {
+		&.correct {
+			background-color: green;
+		}
 
-	button.incorrect {
-		background-color: red;
+		&.incorrect {
+			background-color: red;
+		}
 	}
 
 	h5.correct {
