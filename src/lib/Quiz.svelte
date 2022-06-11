@@ -3,10 +3,12 @@
 	import { onMount, beforeUpdate, afterUpdate, onDestroy } from "svelte";
 	import type { Question as IQuestion } from "src/models/Question";
 	import Question from "./Question.svelte";
+	import Modal from "./Modal.svelte";
 
 	let quiz = getQuiz();
 	let currentQuestion = 0;
 	let score = 0;
+	let showModal = false;
 
 	onMount(() => {
 		console.log("Mounted!");
@@ -31,9 +33,10 @@
 	}
 
 	function resetQuiz() {
-		quiz = getQuiz();
+		showModal = false;
 		currentQuestion = 0;
 		score = 0;
+		quiz = getQuiz();
 	}
 
 	function addToScore() {
@@ -41,9 +44,8 @@
 	}
 
 	// Reactive statement
-	$: if (score > 7) {
-		alert("You won!");
-		resetQuiz();
+	$: if (score > 1) {
+		showModal = true;
 	}
 
 	// Reactive decearation
@@ -73,8 +75,16 @@
 	{/await}
 </div>
 
-<style>
-	.fade-wrapper {
-		position: absolute;
-	}
-</style>
+{#if showModal}
+	<Modal>
+		<h3>You won!</h3>
+		<p>Congratulations 🥳</p>
+		<button on:click={resetQuiz}>Start New Quiz</button>
+	</Modal>
+
+	<style>
+		.fade-wrapper {
+			position: absolute;
+		}
+	</style>
+{/if}
