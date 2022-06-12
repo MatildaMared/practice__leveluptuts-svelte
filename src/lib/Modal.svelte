@@ -25,9 +25,15 @@
 	}
 
 	.modal {
+		width: fit-content;
+		min-width: 300px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 		background: #eee;
-		padding: 2rem;
+		padding: 3rem;
 		border-radius: 16px;
-		margin: 1rem;
+		margin-inline: auto;
+		margin-top: 2rem;
 	}
 </style>

@@ -37,36 +37,48 @@
 	}
 </script>
 
-<h3>{@html question.question}</h3>
+<section>
+	<h3>{@html question.question}</h3>
 
-{#if isAnswered}
-	<h5 class:correct={isCorrect}>
-		{#if isCorrect}
-			You got it right! 🥳
-		{:else}
-			You goofed up... 😨
-		{/if}
-	</h5>
-{/if}
+	{#if isAnswered}
+		<h5 class:correct={isCorrect}>
+			{#if isCorrect}
+				You got it right! 🥳
+			{:else}
+				You goofed up... 😨
+			{/if}
+		</h5>
+	{/if}
 
-{#each allAnswers as answer}
-	<button
-		class={isAnswered && (answer.isCorrect ? "correct" : "incorrect")}
-		on:click={() => checkQuestion(answer.isCorrect)}
-		disabled={isAnswered}
-	>
-		{@html answer.answer}</button
-	>
-{/each}
+	{#each allAnswers as answer}
+		<button
+			class={isAnswered && (answer.isCorrect ? "correct" : "incorrect")}
+			on:click={() => checkQuestion(answer.isCorrect)}
+			disabled={isAnswered}
+		>
+			{@html answer.answer}</button
+		>
+	{/each}
 
-{#if isAnswered}
-	<div>
-		<button on:click={nextQuestion}>Next Question</button>
-	</div>
-{/if}
+	{#if isAnswered}
+		<div>
+			<button on:click={nextQuestion}>Next Question</button>
+		</div>
+	{/if}
+</section>
 
 <style lang="scss">
+	section {
+		box-sizing: border-box;
+		margin: 0 auto;
+		width: 600px;
+		text-align: center;
+		padding: 2rem;
+		border: 1px dashed rgba(160, 140, 190);
+		border-radius: 8px;
+	}
 	button {
+		display: block;
 		&.correct {
 			background-color: green;
 		}

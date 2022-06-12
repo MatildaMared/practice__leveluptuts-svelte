@@ -29,7 +29,7 @@
 	}
 
 	// Reactive statement
-	$: if ($score > 1) {
+	$: if ($score > 2) {
 		showModal = true;
 	}
 
@@ -37,20 +37,18 @@
 	$: questionNumber = currentQuestion + 1;
 </script>
 
-<div>
-	<button on:click={resetQuiz}>Start New Quiz</button>
+<h3>My Score: {$score}</h3>
+<h4>Question #{questionNumber}</h4>
 
-	<h3>My Score: {$score}</h3>
-	<h4>Question #{questionNumber}</h4>
-
+<div class="container">
 	{#await quiz}
 		<p>Loading...</p>
 	{:then data}
 		{#each data as question, index}
 			{#if index === currentQuestion}
 				<div
-					in:fly={{ x: 100 }}
-					out:fly={{ x: -200 }}
+					in:fly={{ y: -100 }}
+					out:fly={{ y: 200 }}
 					class="fade-wrapper"
 				>
 					<Question {nextQuestion} {question} />
@@ -58,6 +56,7 @@
 			{/if}
 		{/each}
 	{/await}
+	<button on:click={resetQuiz}>Start New Quiz</button>
 </div>
 
 {#if showModal}
@@ -70,6 +69,28 @@
 
 <style lang="scss">
 	.fade-wrapper {
+		position: fixed;
+		margin-inline: auto;
+	}
+
+	.container {
+		width: 100%;
+		min-height: 500px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	button {
 		position: absolute;
+		bottom: 2rem;
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: #7d6d95;
+
+		&:hover {
+			opacity: 0.8;
+			transform: translateX(-50%) translateY(-2px);
+		}
 	}
 </style>
